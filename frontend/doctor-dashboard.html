@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Doctor Dashboard - Hospital Booking System</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="app-shell">
+  <div class="sidebar">
+    <div class="brand">H Hospital Booking</div>
+    <div class="who">Signed in as<br><b id="whoName">Doctor</b></div>
+
+    <a class="nav-item" href="#overview" data-panel="overview">🏠 Overview</a>
+    <a class="nav-item" href="#today" data-panel="today">🩺 My Bookings</a>
+    <a class="nav-item" href="#history" data-panel="history">🔍 Patient History</a>
+    <a class="nav-item" href="#feedback" data-panel="feedback">⭐ My Patient Feedback</a>
+    <a class="nav-item" href="#reports" data-panel="reports">📄 Reports</a>
+
+    <div class="nav-spacer"></div>
+    <div class="nav-item logout" id="logoutBtn">⏻ Log Out</div>
+  </div>
+
+  <div class="main">
+    <div id="banner" class="banner"></div>
+
+    <div class="panel" id="panel-overview">
+      <h1>Good day, <span id="welcomeName">Doctor</span></h1>
+      <div class="subtitle" id="todayLabel"></div>
+      <div class="stats-grid" id="doctorStats"></div>
+      <div class="grid-2">
+        <div class="card">
+          <h2>Next patient</h2>
+          <div id="nextPatient"><div class="empty-state">Loading...</div></div>
+        </div>
+        <div class="card">
+          <h2>Patient feedback (last 90 days)</h2>
+          <div id="myRatings"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel" id="panel-today">
+      <h1>My Bookings</h1>
+      <div class="subtitle">Today's and upcoming appointments assigned to you.</div>
+
+      <div class="card">
+        <div class="toolbar">
+          <input type="date" id="bookingsDate" title="Show one day only" style="padding:9px 10px;border:1.5px solid var(--border);border-radius:9px;">
+          <button class="btn btn-secondary btn-small" id="bookingsTodayBtn">Today</button>
+          <button class="btn btn-secondary btn-small" id="bookingsAllBtn">All upcoming</button>
+        </div>
+        <table>
+          <thead>
+            <tr><th>Patient</th><th>Date</th><th>Time</th><th>Reason for visit</th><th>Status</th><th>Actions</th></tr>
+          </thead>
+          <tbody id="bookingsBody"></tbody>
+        </table>
+        <div class="empty-state" id="bookingsEmpty" style="display:none;">No bookings found.</div>
+      </div>
+    </div>
+
+    <div class="panel" id="panel-history">
+      <h1>Patient History</h1>
+      <div class="subtitle">Search for a patient by their ID number to view and download their full appointment history.</div>
+
+      <div class="card">
+        <div class="toolbar">
+          <input type="text" id="historySearchInput" placeholder="Enter patient ID number (13 digits)..." inputmode="numeric" maxlength="13">
+          <button class="btn btn-secondary btn-small" id="historySearchBtn">Search</button>
+        </div>
+        <div id="historySearchResult"></div>
+      </div>
+    </div>
+
+    <div class="panel" id="panel-feedback">
+      <h1>My Patient Feedback</h1>
+      <div class="subtitle">Anonymous survey results from your patients, for appointments in the chosen period.</div>
+      <div class="card">
+        <div class="filters">
+          <div class="field"><label for="fbFrom">From</label><input type="date" id="fbFrom"></div>
+          <div class="field"><label for="fbTo">To</label><input type="date" id="fbTo"></div>
+          <button class="btn btn-secondary btn-small" id="fbLoadBtn">Show</button>
+        </div>
+        <div class="stats-grid" id="fbStats"></div>
+        <table>
+          <thead><tr><th>Appointment</th><th>Overall</th><th>Doctor</th><th>Waiting</th><th>Recommend</th><th>Comments</th></tr></thead>
+          <tbody id="fbItems"></tbody>
+        </table>
+        <div class="empty-state" id="fbEmpty" style="display:none;">No feedback for this period yet.</div>
+      </div>
+    </div>
+
+    <div class="panel" id="panel-reports">
+      <h1>Reports</h1>
+      <div class="subtitle">Download reports as PDF (to print) or as CSV (opens in Excel).</div>
+
+      <div class="card">
+        <h2>📅 My bookings report</h2>
+        <div class="filters">
+          <div class="field"><label for="repFrom">From</label><input type="date" id="repFrom"></div>
+          <div class="field"><label for="repTo">To</label><input type="date" id="repTo"></div>
+          <div class="field"><label for="repStatus">Status</label>
+            <select id="repStatus">
+              <option value="">All statuses</option>
+              <option value="BOOKED">Booked</option><option value="CHECKED_IN">Checked in</option>
+              <option value="WITH_DOCTOR">With doctor</option><option value="COMPLETED">Completed</option>
+              <option value="CANCELLED">Cancelled</option>
+            </select>
+          </div>
+        </div>
+        <div class="btn-row">
+          <button class="btn btn-primary btn-small" id="repPdfBtn">⬇ Download PDF</button>
+          <button class="btn btn-secondary btn-small" id="repCsvBtn">⬇ Download Excel (CSV)</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>⭐ My feedback report</h2>
+        <p class="muted" style="margin-bottom:12px;">Uses the period chosen on <a href="#feedback">My Patient Feedback</a>.</p>
+        <div class="btn-row">
+          <button class="btn btn-primary btn-small" id="repFbPdfBtn">⬇ Download PDF</button>
+          <button class="btn btn-secondary btn-small" id="repFbCsvBtn">⬇ Download Excel (CSV)</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>🔍 Patient history report</h2>
+        <p class="muted">Find the patient on the <a href="#history">Patient History</a> page, then use its PDF / Excel buttons.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="js/api.js"></script>
+<script src="js/doctor.js"></script>
+</body>
+</html>

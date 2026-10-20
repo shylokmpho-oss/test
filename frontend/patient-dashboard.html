@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Patient Dashboard - Hospital Booking System</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="app-shell">
+  <div class="sidebar">
+    <div class="brand">H Hospital Booking</div>
+    <div class="who">Signed in as<br><b id="whoName">Patient</b></div>
+
+    <a class="nav-item" href="#overview" data-panel="overview">🏠 Overview</a>
+    <a class="nav-item" href="#book" data-panel="book">📅 Book Appointment</a>
+    <a class="nav-item" href="#mine" data-panel="mine">📋 My Appointments</a>
+    <a class="nav-item" href="#feedback" data-panel="feedback">⭐ Rate My Visits <span class="nav-badge" id="surveyBadge"></span></a>
+
+    <div class="nav-spacer"></div>
+    <div class="nav-item logout" id="logoutBtn">⏻ Log Out</div>
+  </div>
+
+  <div class="main">
+    <div id="banner" class="banner"></div>
+
+    <!-- Overview panel -->
+    <div class="panel" id="panel-overview">
+      <h1>Welcome, <span id="welcomeName">Patient</span></h1>
+      <div class="subtitle">Your next appointment and a quick summary of your visits.</div>
+
+      <div class="stats-grid" id="patientStats"></div>
+
+      <div class="grid-2">
+        <div class="card">
+          <h2>Next appointment</h2>
+          <div id="nextAppointment"><div class="empty-state">Loading...</div></div>
+        </div>
+        <div class="card">
+          <h2>Quick actions</h2>
+          <div class="btn-row" style="flex-direction:column;align-items:stretch;">
+            <a href="#book"><button class="btn btn-primary">📅 Book an appointment</button></a>
+            <a href="#mine"><button class="btn btn-secondary">📋 View my appointments</button></a>
+            <a href="#feedback"><button class="btn btn-secondary">⭐ Rate a visit</button></a>
+          </div>
+          <p class="muted" style="margin-top:14px;">In an emergency press the red <b>SOS</b> button (bottom right) or call <a href="tel:10177">10177</a>.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Book Appointment panel -->
+    <div class="panel" id="panel-book">
+      <h1>Book Appointment</h1>
+      <div class="subtitle">Choose a doctor, date, time and the reason for your visit.</div>
+
+      <div class="card" style="max-width:520px;">
+        <form id="bookForm" novalidate>
+          <p class="required-note">Required fields</p>
+          <div class="field" id="f-doctor">
+            <label for="doctor_id">Doctor</label>
+            <select id="doctor_id" required>
+              <option value="">Loading doctors...</option>
+            </select>
+            <div class="hint" id="doctorHint"></div>
+            <div class="error">Please choose a doctor.</div>
+          </div>
+          <div class="field" id="f-date">
+            <label for="appointment_date">Date</label>
+            <input type="date" id="appointment_date" required>
+            <div class="error">Please choose a date (today or later).</div>
+          </div>
+          <div class="field" id="f-time">
+            <label for="time_slot">Time</label>
+            <select id="time_slot" required>
+              <option value="">Choose a doctor and date first</option>
+            </select>
+            <div class="error">Please choose a time.</div>
+          </div>
+          <div class="field" id="f-reason">
+            <label for="reason_id">Reason for visit</label>
+            <select id="reason_id" required>
+              <option value="">Loading reasons...</option>
+            </select>
+            <div class="error">Please choose a reason for your visit.</div>
+          </div>
+          <div class="field" id="f-reason-notes">
+            <label for="reason_notes">More details</label>
+            <textarea id="reason_notes" maxlength="250" placeholder="Optional - anything the doctor should know"></textarea>
+            <div class="error">Please describe the reason for your visit.</div>
+          </div>
+          <button type="submit" class="btn btn-primary" id="bookSubmitBtn">Book Appointment</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- My Appointments panel -->
+    <div class="panel" id="panel-mine">
+      <h1>My Appointments</h1>
+      <div class="subtitle">View, reschedule, or cancel your bookings. Click a doctor's name for their details.</div>
+
+      <div class="card">
+        <div class="toolbar" style="justify-content:flex-end;">
+          <span class="muted" style="margin-right:auto;">Download my appointment history:</span>
+          <button class="btn btn-secondary btn-small" id="historyPdfBtn">⬇ PDF</button>
+          <button class="btn btn-secondary btn-small" id="historyCsvBtn">⬇ Excel (CSV)</button>
+        </div>
+        <table>
+          <thead>
+            <tr><th>Doctor</th><th>Date</th><th>Time</th><th>Reason</th><th>Status</th><th>Queue</th><th>Actions</th></tr>
+          </thead>
+          <tbody id="myBookingsBody"></tbody>
+        </table>
+        <div class="empty-state" id="myBookingsEmpty" style="display:none;">You have no appointments yet. <a href="#book">Book one now</a>.</div>
+      </div>
+    </div>
+
+    <!-- Feedback panel -->
+    <div class="panel" id="panel-feedback">
+      <h1>Rate My Visits</h1>
+      <div class="subtitle">Tell us about your experience after each completed appointment. It takes less than a minute.</div>
+
+      <div class="card">
+        <h2>Waiting for your feedback</h2>
+        <table>
+          <thead><tr><th>Doctor</th><th>Date</th><th>Reason</th><th></th></tr></thead>
+          <tbody id="toRateBody"></tbody>
+        </table>
+        <div class="empty-state" id="toRateEmpty" style="display:none;">You have rated all your completed visits. Thank you!</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Edit booking modal -->
+<div class="modal-overlay" id="editModal">
+  <div class="modal">
+    <h3>Reschedule Appointment</h3>
+    <form id="editForm" novalidate>
+      <p class="required-note">Required fields</p>
+      <input type="hidden" id="edit_booking_id">
+      <div class="field" id="f-edit-doctor">
+        <label for="edit_doctor_id">Doctor</label>
+        <select id="edit_doctor_id" required></select>
+      </div>
+      <div class="field" id="f-edit-date">
+        <label for="edit_date">Date</label>
+        <input type="date" id="edit_date" required>
+      </div>
+      <div class="field" id="f-edit-time">
+        <label for="edit_time">Time</label>
+        <select id="edit_time" required></select>
+        <div class="error">Please choose a time.</div>
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="btn btn-secondary" id="editCancelBtn">Cancel</button>
+        <button type="submit" class="btn btn-primary">Save Changes</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Doctor / appointment details modal -->
+<div class="modal-overlay" id="doctorModal">
+  <div class="modal">
+    <h3 id="doctorModalTitle">Doctor details</h3>
+    <div id="doctorModalBody"></div>
+    <div class="modal-actions" style="margin-top:18px;">
+      <button type="button" class="btn btn-secondary" id="doctorModalClose">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- Survey modal -->
+<div class="modal-overlay" id="surveyModal">
+  <div class="modal">
+    <h3>How was your visit?</h3>
+    <p class="muted" id="surveyFor" style="margin-bottom:12px;"></p>
+    <form id="surveyForm" novalidate>
+      <p class="required-note">Required fields</p>
+      <div class="field" data-rating="overall_rating">
+        <label>Overall experience</label>
+        <div class="stars"></div>
+        <input type="hidden" required>
+        <div class="error">Please choose 1 to 5 stars.</div>
+      </div>
+      <div class="field" data-rating="doctor_rating">
+        <label>The doctor</label>
+        <div class="stars"></div>
+        <input type="hidden" required>
+        <div class="error">Please choose 1 to 5 stars.</div>
+      </div>
+      <div class="field" data-rating="waiting_rating">
+        <label>Waiting time</label>
+        <div class="stars"></div>
+        <input type="hidden" required>
+        <div class="error">Please choose 1 to 5 stars.</div>
+      </div>
+      <div class="field" data-rating="staff_rating">
+        <label>Reception staff</label>
+        <div class="stars"></div>
+        <input type="hidden" required>
+        <div class="error">Please choose 1 to 5 stars.</div>
+      </div>
+      <div class="field" id="f-recommend">
+        <label>Would you recommend us to family and friends?</label>
+        <div class="choice-row">
+          <label><input type="radio" name="would_recommend" value="true"> Yes</label>
+          <label><input type="radio" name="would_recommend" value="false"> No</label>
+        </div>
+        <input type="hidden" required>
+        <div class="error">Please choose Yes or No.</div>
+      </div>
+      <div class="field">
+        <label for="survey_comments">Comments</label>
+        <textarea id="survey_comments" maxlength="500" placeholder="Optional - what went well, what could be better?"></textarea>
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="btn btn-secondary" id="surveyCancelBtn">Not now</button>
+        <button type="submit" class="btn btn-primary" id="surveySubmitBtn">Submit Feedback</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script src="js/api.js"></script>
+<script src="js/patient.js"></script>
+<script src="js/sos.js"></script>
+</body>
+</html>

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hospital Booking System - Login</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="auth-wrap">
+  <div class="auth-card">
+    <div class="auth-header">
+      <a href="index.html" class="back-home">← Back to Home</a>
+      <div class="brand">
+        <div class="badge">H</div>
+        <div class="name">Hospital Booking System</div>
+      </div>
+      <div class="sub">Sign in to manage your bookings</div>
+    </div>
+    <div class="auth-body">
+
+      <div id="banner" class="banner"></div>
+
+      <div class="role-row">
+        <div class="role-btn active" data-role="Patient">Patient</div>
+        <div class="role-btn" data-role="Receptionist">Receptionist</div>
+        <div class="role-btn" data-role="Doctor">Doctor</div>
+      </div>
+
+      <form id="loginForm" novalidate>
+        <div class="field" id="f-id">
+          <label for="id_number">ID / Passport Number</label>
+          <input type="text" id="id_number" autocomplete="username" required>
+          <div class="error">Please enter your ID or passport number.</div>
+        </div>
+        <div class="field" id="f-password">
+          <label for="password">Password</label>
+          <input type="password" id="password" autocomplete="current-password" required>
+          <div class="error">Please enter your password.</div>
+          <div class="hint" style="text-align:right;"><a href="forgot-password.html" id="forgotLink">Forgot password?</a></div>
+        </div>
+        <button type="submit" class="btn btn-primary" id="submitBtn">Log In</button>
+      </form>
+
+      <div class="divider" id="registerDivider">New patient</div>
+      <a href="register.html" id="registerLink"><button type="button" class="btn btn-secondary" id="registerBtn">Create an account</button></a>
+    </div>
+  </div>
+</div>
+
+<script src="js/api.js"></script>
+<script src="js/login.js"></script>
+<script src="js/sos.js"></script>
+</body>
+</html>

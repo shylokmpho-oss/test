@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Receptionist Dashboard - Hospital Booking System</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="app-shell">
+  <div class="sidebar">
+    <div class="brand">H Hospital Booking</div>
+    <div class="who">Signed in as<br><b id="whoName">Receptionist</b></div>
+
+    <a class="nav-item" href="#overview" data-panel="overview">🏠 Overview</a>
+    <a class="nav-item" href="#sos" data-panel="sos">🚨 SOS Alerts <span class="nav-badge" id="sosBadge"></span></a>
+    <a class="nav-item" href="#manage" data-panel="manage">🗂️ Manage Bookings</a>
+    <a class="nav-item" href="#new" data-panel="new">➕ New Booking</a>
+    <a class="nav-item" href="#history" data-panel="history">🔍 Patient History</a>
+    <a class="nav-item" href="#staff" data-panel="staff">👩‍⚕️ Staff &amp; Doctors</a>
+    <a class="nav-item" href="#register-staff" data-panel="register-staff">➕ Register Doctor / Receptionist</a>
+    <a class="nav-item" href="#surveys" data-panel="surveys">⭐ Patient Surveys</a>
+    <a class="nav-item" href="#reports" data-panel="reports">📄 Reports</a>
+
+    <div class="nav-spacer"></div>
+    <div class="nav-item logout" id="logoutBtn">⏻ Log Out</div>
+  </div>
+
+  <div class="main">
+    <div class="sos-bar" id="sosBar">
+      <span>🚨 <span id="sosBarText">SOS alert</span></span>
+      <a href="#sos">View alerts</a>
+    </div>
+    <div id="banner" class="banner"></div>
+
+    <!-- Overview panel -->
+    <div class="panel" id="panel-overview">
+      <h1>Today at reception</h1>
+      <div class="subtitle" id="todayLabel"></div>
+      <div class="stats-grid" id="receptionStats"></div>
+      <div class="grid-2">
+        <div class="card">
+          <h2>Patient satisfaction (last 30 days)</h2>
+          <div id="satisfaction"></div>
+        </div>
+        <div class="card">
+          <h2>Quick actions</h2>
+          <div class="btn-row" style="flex-direction:column;align-items:stretch;">
+            <a href="#manage"><button class="btn btn-primary">🗂️ Check patients in</button></a>
+            <a href="#new"><button class="btn btn-secondary">➕ New booking for a patient</button></a>
+            <a href="#register-staff"><button class="btn btn-secondary">👩‍⚕️ Register a doctor</button></a>
+            <a href="#reports"><button class="btn btn-secondary">📄 Download a report</button></a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SOS alerts panel -->
+    <div class="panel" id="panel-sos">
+      <h1>SOS Alerts</h1>
+      <div class="subtitle">Emergency alerts from patients. This list refreshes every 15 seconds.</div>
+      <div class="card">
+        <div class="toolbar">
+          <label style="display:flex;gap:8px;align-items:center;font-size:14px;">
+            <input type="checkbox" id="sosShowAll"> Also show alerts resolved in the last 7 days
+          </label>
+        </div>
+        <table>
+          <thead><tr><th>Raised</th><th>Patient</th><th>Message</th><th>Location</th><th>Status</th><th>Actions</th></tr></thead>
+          <tbody id="sosBody"></tbody>
+        </table>
+        <div class="empty-state" id="sosEmpty" style="display:none;">No open SOS alerts.</div>
+      </div>
+    </div>
+
+    <!-- Manage Bookings panel -->
+    <div class="panel" id="panel-manage">
+      <h1>Manage Bookings</h1>
+      <div class="subtitle">Search, check in, reschedule, or cancel any booking.</div>
+
+      <div class="card">
+        <div class="toolbar">
+          <input type="text" id="searchInput" placeholder="Search by patient or doctor surname...">
+          <input type="date" id="manageDate" title="Show one day only" style="padding:9px 10px;border:1.5px solid var(--border);border-radius:9px;">
+          <button class="btn btn-secondary btn-small" id="searchBtn">Search</button>
+          <button class="btn btn-secondary btn-small" id="clearSearchBtn">Clear</button>
+        </div>
+        <table>
+          <thead>
+            <tr><th>Patient</th><th>Doctor</th><th>Date</th><th>Time</th><th>Reason</th><th>Status</th><th>Queue</th><th>Actions</th></tr>
+          </thead>
+          <tbody id="bookingsBody"></tbody>
+        </table>
+        <div class="empty-state" id="bookingsEmpty" style="display:none;">No bookings found.</div>
+      </div>
+    </div>
+
+    <!-- New Booking panel -->
+    <div class="panel" id="panel-new">
+      <h1>New Booking</h1>
+      <div class="subtitle">Create a booking on behalf of a patient.</div>
+
+      <div class="card" style="max-width:520px;">
+        <form id="newBookingForm" novalidate>
+          <p class="required-note">Required fields</p>
+          <div class="field" id="f-patient">
+            <label for="patient_id_number">Patient ID / Passport Number</label>
+            <div style="display:flex;gap:8px;">
+              <input type="text" id="patient_id_number" maxlength="20" required>
+              <button type="button" class="btn btn-secondary btn-small" id="findPatientBtn">Find</button>
+            </div>
+            <div class="hint" id="patientLookup">Enter the ID number and press Find (or Tab).</div>
+            <div class="error">Enter a 13-digit ID number or a passport number.</div>
+          </div>
+
+          <!-- Shown when no patient has this ID number: add them here -->
+          <div id="newPatientSection" class="card" style="display:none;background:#f8faff;border-color:#cfdcfb;">
+            <h2 style="margin-bottom:6px;">➕ New patient</h2>
+            <p class="muted" style="margin-bottom:14px;">No patient has this ID number yet. Add their details - they are saved with the booking.</p>
+            <div class="row-2">
+              <div class="field">
+                <label for="np_first">First Name</label>
+                <input type="text" id="np_first" maxlength="50">
+                <div class="error">Required.</div>
+              </div>
+              <div class="field">
+                <label for="np_last">Last Name</label>
+                <input type="text" id="np_last" maxlength="50">
+                <div class="error">Required.</div>
+              </div>
+            </div>
+            <div class="field">
+              <label for="np_surname">Surname (as on ID)</label>
+              <input type="text" id="np_surname" maxlength="50">
+              <div class="error">Required.</div>
+            </div>
+            <div class="row-2">
+              <div class="field">
+                <label for="np_mobile">Mobile Number</label>
+                <input type="text" id="np_mobile" placeholder="082 345 6789">
+                <div class="error">Enter a valid mobile number.</div>
+              </div>
+              <div class="field">
+                <label for="np_email">Email Address</label>
+                <input type="email" id="np_email" maxlength="100">
+                <div class="error">Enter a valid email address.</div>
+              </div>
+            </div>
+            <div class="field">
+              <label for="np_channel">Send confirmations by</label>
+              <select id="np_channel">
+                <option value="SMS">SMS</option>
+                <option value="WHATSAPP">WhatsApp</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label style="display:flex;gap:8px;align-items:center;">
+                <input type="checkbox" id="np_allow_login" style="width:auto;"> Allow this patient to log in online
+              </label>
+              <div class="hint">They can then book, reschedule and rate visits themselves.</div>
+            </div>
+            <div id="npLoginFields" style="display:none;">
+              <div class="field">
+                <label for="np_temp_password">Temporary password</label>
+                <div style="display:flex;gap:8px;">
+                  <input type="text" id="np_temp_password" autocomplete="off" spellcheck="false">
+                  <button type="button" class="btn btn-secondary btn-small" id="npGenerateBtn">Generate</button>
+                </div>
+                <div class="hint">Give this to the patient. They must choose their own password the first time they log in.</div>
+                <div class="error">At least 8 characters.</div>
+              </div>
+              <div class="field">
+                <label style="display:flex;gap:8px;align-items:center;font-weight:400;">
+                  <input type="checkbox" id="np_send_login" style="width:auto;" checked> Send the login details to the patient's phone
+                </label>
+              </div>
+            </div>
+          </div>
+          <div class="field" id="f-doctor">
+            <label for="new_doctor_id">Doctor</label>
+            <select id="new_doctor_id" required>
+              <option value="">Loading doctors...</option>
+            </select>
+            <div class="error">Please choose a doctor.</div>
+          </div>
+          <div class="field" id="f-date">
+            <label for="new_date">Date</label>
+            <input type="date" id="new_date" required>
+            <div class="error">Please choose a date.</div>
+          </div>
+          <div class="field" id="f-time">
+            <label for="new_time">Time</label>
+            <select id="new_time" required>
+              <option value="">Choose a doctor and date first</option>
+            </select>
+            <div class="error">Please choose a time.</div>
+          </div>
+          <div class="field" id="f-reason">
+            <label for="new_reason_id">Reason for visit</label>
+            <select id="new_reason_id" required>
+              <option value="">Loading reasons...</option>
+            </select>
+            <div class="error">Please choose a reason for the visit.</div>
+          </div>
+          <div class="field" id="f-reason-notes">
+            <label for="new_reason_notes">More details</label>
+            <textarea id="new_reason_notes" maxlength="250"></textarea>
+            <div class="error">Please describe the reason for the visit.</div>
+          </div>
+          <button type="submit" class="btn btn-primary" id="newBookingBtn">Create Booking</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Patient History panel -->
+    <div class="panel" id="panel-history">
+      <h1>Patient History</h1>
+      <div class="subtitle">Search for a patient by their ID number to view and download their full appointment history.</div>
+
+      <div class="card">
+        <div class="toolbar">
+          <input type="text" id="historySearchInput" placeholder="Enter patient ID number (13 digits)..." inputmode="numeric" maxlength="13">
+          <button class="btn btn-secondary btn-small" id="historySearchBtn">Search</button>
+        </div>
+        <div id="historySearchResult"></div>
+      </div>
+    </div>
+
+    <!-- Staff list panel -->
+    <div class="panel" id="panel-staff">
+      <h1>Staff &amp; Doctors</h1>
+      <div class="subtitle">Everyone who can log in as a doctor or receptionist. Deactivated staff can no longer log in or be booked.</div>
+      <div class="card">
+        <div class="toolbar" style="justify-content:flex-end;">
+          <a href="#register-staff"><button class="btn btn-primary btn-small">➕ Register Doctor / Receptionist</button></a>
+        </div>
+        <table>
+          <thead><tr><th>Name</th><th>Role</th><th>ID number</th><th>Contact</th><th>Specialty / Hours</th><th>Status</th><th></th></tr></thead>
+          <tbody id="staffBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Register staff panel -->
+    <div class="panel" id="panel-register-staff">
+      <h1>Register Doctor / Receptionist</h1>
+      <div class="subtitle">Create a login for a new staff member. They can change the password later with "Forgot password".</div>
+
+      <div class="card" style="max-width:560px;">
+        <div class="role-row">
+          <div class="role-btn active" data-staff-role="Doctor">Doctor</div>
+          <div class="role-btn" data-staff-role="Receptionist">Receptionist</div>
+        </div>
+        <form id="staffForm" novalidate>
+          <p class="required-note">Required fields</p>
+          <div class="row-2">
+            <div class="field">
+              <label for="staff_first">First Name</label>
+              <input type="text" id="staff_first" maxlength="50" required>
+              <div class="error">Required.</div>
+            </div>
+            <div class="field">
+              <label for="staff_surname">Surname</label>
+              <input type="text" id="staff_surname" maxlength="50" required>
+              <div class="error">Required.</div>
+            </div>
+          </div>
+          <div class="field">
+            <label for="staff_id">ID / Passport Number</label>
+            <input type="text" id="staff_id" maxlength="20" required>
+            <div class="hint">13-digit ID number or passport number. This is their login.</div>
+            <div class="error">Enter a 13-digit ID number or a passport number.</div>
+          </div>
+          <div class="row-2">
+            <div class="field">
+              <label for="staff_email">Email Address</label>
+              <input type="email" id="staff_email" maxlength="100" required>
+              <div class="error">Enter a valid email address.</div>
+            </div>
+            <div class="field">
+              <label for="staff_phone">Mobile Number</label>
+              <input type="text" id="staff_phone" placeholder="082 345 6789" required>
+              <div class="error">Enter a valid mobile number.</div>
+            </div>
+          </div>
+          <div id="doctorFields">
+            <div class="row-2">
+              <div class="field">
+                <label for="staff_specialty">Specialty</label>
+                <input type="text" id="staff_specialty" maxlength="50" list="specialties" required>
+                <datalist id="specialties">
+                  <option value="General Practice"><option value="Paediatrics"><option value="Internal Medicine">
+                  <option value="Obstetrics &amp; Gynaecology"><option value="Orthopaedics"><option value="Dermatology">
+                  <option value="Cardiology"><option value="Psychiatry"><option value="Dentistry">
+                </datalist>
+                <div class="error">Required.</div>
+              </div>
+              <div class="field">
+                <label for="staff_start">Working hours</label>
+                <div style="display:flex;gap:6px;align-items:center;">
+                  <input type="time" id="staff_start" value="08:00" step="1200" required>
+                  <span>to</span>
+                  <input type="time" id="staff_end" value="16:00" step="1200" required>
+                </div>
+                <div class="error">The end time must be after the start time.</div>
+              </div>
+            </div>
+          </div>
+          <div class="row-2">
+            <div class="field">
+              <label for="staff_password">Temporary Password</label>
+              <input type="password" id="staff_password" autocomplete="new-password" required>
+              <div class="error">At least 8 characters.</div>
+            </div>
+            <div class="field">
+              <label for="staff_confirm">Confirm Password</label>
+              <input type="password" id="staff_confirm" autocomplete="new-password" required>
+              <div class="error">Passwords do not match.</div>
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary" id="staffSubmitBtn">Register Doctor</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Surveys panel -->
+    <div class="panel" id="panel-surveys">
+      <h1>Patient Surveys</h1>
+      <div class="subtitle">How patients rated their visits, for appointments in the chosen period.</div>
+      <div class="card">
+        <div class="filters">
+          <div class="field"><label for="surveyFrom">From</label><input type="date" id="surveyFrom"></div>
+          <div class="field"><label for="surveyTo">To</label><input type="date" id="surveyTo"></div>
+          <div class="field"><label for="surveyDoctor">Doctor</label><select id="surveyDoctor"><option value="">All doctors</option></select></div>
+          <button class="btn btn-secondary btn-small" id="surveyLoadBtn">Show</button>
+          <button class="btn btn-secondary btn-small" id="surveyPdfBtn">⬇ PDF</button>
+          <button class="btn btn-secondary btn-small" id="surveyCsvBtn">⬇ Excel (CSV)</button>
+        </div>
+        <div class="stats-grid" id="surveyStats"></div>
+        <h2>By doctor</h2>
+        <table style="margin-bottom:20px;">
+          <thead><tr><th>Doctor</th><th>Responses</th><th>Overall</th><th>Doctor</th><th>Waiting</th><th>Staff</th><th>Recommend</th></tr></thead>
+          <tbody id="surveyByDoctor"></tbody>
+        </table>
+        <h2>Responses</h2>
+        <table>
+          <thead><tr><th>Appointment</th><th>Patient</th><th>Doctor</th><th>Overall</th><th>Recommend</th><th>Comments</th></tr></thead>
+          <tbody id="surveyItems"></tbody>
+        </table>
+        <div class="empty-state" id="surveyEmpty" style="display:none;">No survey responses for this period.</div>
+      </div>
+    </div>
+
+    <!-- Reports panel -->
+    <div class="panel" id="panel-reports">
+      <h1>Reports</h1>
+      <div class="subtitle">Download reports as PDF (to print or submit) or as CSV (opens in Excel).</div>
+
+      <div class="card">
+        <h2>📅 Bookings report</h2>
+        <div class="filters">
+          <div class="field"><label for="repFrom">From</label><input type="date" id="repFrom"></div>
+          <div class="field"><label for="repTo">To</label><input type="date" id="repTo"></div>
+          <div class="field"><label for="repDoctor">Doctor</label><select id="repDoctor"><option value="">All doctors</option></select></div>
+          <div class="field"><label for="repStatus">Status</label>
+            <select id="repStatus">
+              <option value="">All statuses</option>
+              <option value="BOOKED">Booked</option><option value="CHECKED_IN">Checked in</option>
+              <option value="WITH_DOCTOR">With doctor</option><option value="COMPLETED">Completed</option>
+              <option value="CANCELLED">Cancelled</option>
+            </select>
+          </div>
+        </div>
+        <div class="btn-row">
+          <button class="btn btn-primary btn-small" id="repPdfBtn">⬇ Download PDF</button>
+          <button class="btn btn-secondary btn-small" id="repCsvBtn">⬇ Download Excel (CSV)</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>⭐ Patient survey report</h2>
+        <p class="muted" style="margin-bottom:12px;">Ratings and comments for the period chosen on the <a href="#surveys">Patient Surveys</a> page (defaults to this month).</p>
+        <div class="btn-row">
+          <button class="btn btn-primary btn-small" id="repSurveyPdfBtn">⬇ Download PDF</button>
+          <button class="btn btn-secondary btn-small" id="repSurveyCsvBtn">⬇ Download Excel (CSV)</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>🔍 Patient history report</h2>
+        <p class="muted">Find the patient on the <a href="#history">Patient History</a> page, then use its PDF / Excel buttons.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Online login for an existing patient (from Patient History) -->
+<div class="modal-overlay" id="loginModal">
+  <div class="modal">
+    <h3 id="loginModalTitle">Online login</h3>
+    <p class="muted" id="loginModalText" style="margin-bottom:14px;"></p>
+    <form id="loginForm" novalidate>
+      <p class="required-note">Required fields</p>
+      <div class="field" id="f-login-temp">
+        <label for="login_temp_password">Temporary password</label>
+        <div style="display:flex;gap:8px;">
+          <input type="text" id="login_temp_password" autocomplete="off" spellcheck="false" required>
+          <button type="button" class="btn btn-secondary btn-small" id="loginGenerateBtn">Generate</button>
+        </div>
+        <div class="hint">The patient must choose their own password the first time they log in.</div>
+        <div class="error">At least 8 characters.</div>
+      </div>
+      <div class="field">
+        <label style="display:flex;gap:8px;align-items:center;font-weight:400;">
+          <input type="checkbox" id="login_send" style="width:auto;" checked> Send the login details to the patient's phone
+        </label>
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="btn btn-secondary" id="loginCancelBtn">Cancel</button>
+        <button type="submit" class="btn btn-primary" id="loginSaveBtn">Save</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Edit booking modal -->
+<div class="modal-overlay" id="editModal">
+  <div class="modal">
+    <h3>Edit Booking</h3>
+    <form id="editForm" novalidate>
+      <p class="required-note">Required fields</p>
+      <input type="hidden" id="edit_booking_id">
+      <div class="field">
+        <label for="edit_doctor_id">Doctor</label>
+        <select id="edit_doctor_id" required></select>
+      </div>
+      <div class="field">
+        <label for="edit_date">Date</label>
+        <input type="date" id="edit_date" required>
+      </div>
+      <div class="field" id="f-edit-time">
+        <label for="edit_time">Time</label>
+        <select id="edit_time" required></select>
+        <div class="error">Please choose a time.</div>
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="btn btn-secondary" id="editCancelBtn">Cancel</button>
+        <button type="submit" class="btn btn-primary">Save Changes</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script src="js/api.js"></script>
+<script src="js/receptionist.js"></script>
+</body>
+</html>

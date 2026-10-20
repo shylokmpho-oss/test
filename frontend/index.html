@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hospital Booking System</title>
+<link rel="stylesheet" href="css/style.css">
+<style>
+  /* Styles used only on the home page */
+  .home-nav {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 18px 40px; background: rgba(31,56,100,0.92); color: #fff;
+  }
+  .home-nav .brand { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 18px; }
+  .home-nav .brand .badge {
+    width: 32px; height: 32px; border-radius: 8px; background: rgba(255,255,255,0.15);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .home-nav .links { display: flex; gap: 10px; }
+  .home-nav .links a .btn { width: auto; padding: 9px 18px; }
+
+  .hero {
+    padding: 90px 40px 70px; text-align: center; color: #fff;
+    background: linear-gradient(180deg, rgba(14,26,51,0.55), rgba(14,26,51,0.8));
+  }
+  .hero h1 { font-size: 40px; margin-bottom: 14px; }
+  .hero p { font-size: 17px; color: #d8deee; max-width: 640px; margin: 0 auto 28px; }
+  .hero .cta { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+  .hero .cta a .btn { width: auto; padding: 13px 26px; }
+
+  .section { max-width: 1000px; margin: 0 auto; padding: 50px 24px; }
+  .section h2 { font-size: 26px; margin-bottom: 10px; color: var(--navy); }
+  .section .lead { color: var(--muted); margin-bottom: 30px; max-width: 640px; }
+
+  .about-grid { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 36px; align-items: center; }
+  .about-grid .card { margin: 0; }
+  @media (max-width: 760px) { .about-grid { grid-template-columns: 1fr; } }
+
+  .services-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  @media (max-width: 760px) { .services-grid { grid-template-columns: 1fr; } }
+  .service-card { background: #fff; border: 1px solid var(--border); border-radius: 14px; padding: 22px; }
+  .service-card .icon { font-size: 26px; margin-bottom: 10px; }
+  .service-card h3 { font-size: 16px; margin-bottom: 8px; }
+  .service-card p { font-size: 14px; color: var(--muted); }
+
+  .home-footer {
+    background: rgba(31,56,100,0.92); color: #cfd6e8; padding: 30px 40px; text-align: center; font-size: 13px;
+  }
+  .home-footer a { color: #fff; }
+</style>
+</head>
+<body>
+
+<div class="home-nav">
+  <div class="brand">
+    <div class="badge">H</div>
+    Hospital Booking System
+  </div>
+  <div class="links" id="navLinks">
+    <a href="login.html"><button class="btn btn-secondary">Log In</button></a>
+    <a href="register.html"><button class="btn btn-primary">Register</button></a>
+  </div>
+</div>
+
+<div class="hero">
+  <h1>Book your doctor's appointment in minutes</h1>
+  <p>A simple, secure way for patients to book appointments, and for receptionists and doctors to manage the day - all in one place.</p>
+  <div class="cta" id="heroLinks">
+    <a href="register.html"><button class="btn btn-primary">Get Started - Register</button></a>
+    <a href="login.html"><button class="btn btn-secondary">I already have an account</button></a>
+  </div>
+  <p style="margin-top:22px;font-size:14px;color:#d8deee;">In an emergency, press the red <b>SOS</b> button or call <a href="tel:10177" style="color:#fff;font-weight:700;">10177</a>.</p>
+</div>
+
+<!-- About -->
+<div class="section" id="about">
+  <div class="about-grid">
+    <div>
+      <h2>About Us</h2>
+      <p class="lead">
+        The Hospital Booking System was built to take the stress out of scheduling a doctor's visit.
+        Patients can register, book, reschedule, or cancel appointments themselves, any time, without
+        having to call or queue at reception. Receptionists get a single dashboard to manage every
+        booking, and doctors can see exactly who they're seeing and when, with full access to a
+        patient's appointment history.
+      </p>
+      <p class="lead">
+        Our goal is simple: less time spent on paperwork and phone calls, more time spent on care.
+      </p>
+    </div>
+    <div class="card">
+      <h2 style="font-size:18px;">Why patients choose us</h2>
+      <ul style="margin-top:12px; padding-left:18px; color:var(--muted); font-size:14px; line-height:1.9;">
+        <li>Book an appointment in under a minute</li>
+        <li>See your upcoming and past appointments in one place</li>
+        <li>Reschedule or cancel without phoning reception</li>
+        <li>Your information is kept secure and private</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- Services -->
+<div class="section" id="services">
+  <h2>Our Services</h2>
+  <p class="lead">Everything you need to manage appointments, for every role in the hospital.</p>
+  <div class="services-grid">
+    <div class="service-card">
+      <div class="icon">📅</div>
+      <h3>Online Booking</h3>
+      <p>Patients choose a doctor, date and time, and book an appointment instantly - no phone calls needed.</p>
+    </div>
+    <div class="service-card">
+      <div class="icon">🗂️</div>
+      <h3>Booking Management</h3>
+      <p>Receptionists can view, search, edit, check patients in, and manage every booking from one dashboard.</p>
+    </div>
+    <div class="service-card">
+      <div class="icon">🩺</div>
+      <h3>Doctor Schedules</h3>
+      <p>Doctors see their daily appointment list and can mark consultations complete as they go.</p>
+    </div>
+    <div class="service-card">
+      <div class="icon">🔍</div>
+      <h3>Patient History</h3>
+      <p>Doctors and receptionists can search a patient's full appointment history by their ID number.</p>
+    </div>
+    <div class="service-card">
+      <div class="icon">🔒</div>
+      <h3>Secure Accounts</h3>
+      <p>Every account is password protected, with each role only able to see what they're allowed to.</p>
+    </div>
+    <div class="service-card">
+      <div class="icon">📱</div>
+      <h3>SMS &amp; WhatsApp</h3>
+      <p>Get your booking confirmation, changes and password reset codes by SMS or WhatsApp.</p>
+    </div>
+    <div class="service-card">
+      <div class="icon">🚨</div>
+      <h3>SOS Emergency Button</h3>
+      <p>One tap to call an ambulance, or to alert hospital reception with your location.</p>
+    </div>
+    <div class="service-card">
+      <div class="icon">⭐</div>
+      <h3>Your Feedback</h3>
+      <p>Rate every visit so we can keep improving - your doctor, the waiting time and our staff.</p>
+    </div>
+    <div class="service-card">
+      <div class="icon">📄</div>
+      <h3>Downloadable Reports</h3>
+      <p>Download your appointment history, and staff reports, as PDF or Excel.</p>
+    </div>
+  </div>
+</div>
+
+<!-- Contact / Other -->
+<div class="section" id="contact">
+  <h2>Get in Touch</h2>
+  <p class="lead">Have a question, or need help with your account?</p>
+  <div class="card" style="max-width:500px;">
+    <p style="font-size:14px; color:var(--muted); margin-bottom:10px;"><b>Reception:</b> 012 345 6789</p>
+    <p style="font-size:14px; color:var(--muted); margin-bottom:10px;"><b>Email:</b> bookings@hospitalsystem.co.za</p>
+    <p style="font-size:14px; color:var(--muted);"><b>Hours:</b> Monday - Friday, 08:00 - 16:00</p>
+  </div>
+</div>
+
+<div class="home-footer">
+  Hospital Booking System &copy; 2026 &nbsp;|&nbsp; <a href="login.html">Log In</a> &nbsp;|&nbsp; <a href="register.html">Register</a>
+</div>
+
+<script src="js/api.js"></script>
+<script>
+  // Logged in already: offer the way back to the dashboard instead of Log In / Register.
+  if (Session.isLoggedIn()) {
+    const dashboardLink = `<a href="${Session.dashboard()}"><button class="btn btn-primary">My Dashboard</button></a>`;
+    document.getElementById("navLinks").innerHTML = dashboardLink;
+    document.getElementById("heroLinks").innerHTML = dashboardLink;
+  }
+</script>
+<script src="js/sos.js"></script>
+</body>
+</html>

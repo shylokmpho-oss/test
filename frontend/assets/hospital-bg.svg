@@ -1,0 +1,100 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMax slice">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#15294f"/>
+      <stop offset="100%" stop-color="#2b4a80"/>
+    </linearGradient>
+    <linearGradient id="towerFace" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#2d4876"/>
+      <stop offset="100%" stop-color="#22395e"/>
+    </linearGradient>
+  </defs>
+
+  <rect x="0" y="0" width="1600" height="900" fill="url(#sky)"/>
+
+  <!-- distant skyline -->
+  <g opacity="0.35" fill="#1a2c4f">
+    <rect x="40"  y="520" width="90"  height="260"/>
+    <rect x="150" y="470" width="70"  height="310"/>
+    <rect x="240" y="560" width="110" height="220"/>
+    <rect x="1250" y="500" width="90" height="280"/>
+    <rect x="1360" y="450" width="80" height="330"/>
+    <rect x="1460" y="540" width="110" height="240"/>
+  </g>
+
+  <!-- ground -->
+  <rect x="0" y="780" width="1600" height="120" fill="#13203c"/>
+
+  <!-- main hospital building -->
+  <g>
+    <!-- central tower -->
+    <rect x="620" y="300" width="360" height="480" fill="url(#towerFace)"/>
+    <!-- side wings -->
+    <rect x="430" y="470" width="190" height="310" fill="#24416b"/>
+    <rect x="980" y="470" width="190" height="310" fill="#24416b"/>
+
+    <!-- entrance canopy -->
+    <rect x="730" y="700" width="140" height="80" fill="#1a2c4f"/>
+    <rect x="715" y="690" width="170" height="18" fill="#C0530C"/>
+
+    <!-- red cross on tower -->
+    <g fill="#e2572b">
+      <rect x="772" y="340" width="56" height="150"/>
+      <rect x="725" y="387" width="150" height="56"/>
+    </g>
+
+    <!-- tower windows grid -->
+    <g fill="#9db4dd" opacity="0.85">
+      <!-- generated grid: 6 columns x 7 rows inside the tower -->
+      <rect x="650" y="520" width="26" height="36"/>
+      <rect x="696" y="520" width="26" height="36"/>
+      <rect x="742" y="520" width="26" height="36"/>
+      <rect x="834" y="520" width="26" height="36"/>
+      <rect x="880" y="520" width="26" height="36"/>
+      <rect x="926" y="520" width="26" height="36"/>
+
+      <rect x="650" y="580" width="26" height="36"/>
+      <rect x="696" y="580" width="26" height="36"/>
+      <rect x="742" y="580" width="26" height="36"/>
+      <rect x="834" y="580" width="26" height="36"/>
+      <rect x="880" y="580" width="26" height="36"/>
+      <rect x="926" y="580" width="26" height="36"/>
+
+      <rect x="650" y="640" width="26" height="36"/>
+      <rect x="696" y="640" width="26" height="36"/>
+      <rect x="742" y="640" width="26" height="36"/>
+      <rect x="834" y="640" width="26" height="36"/>
+      <rect x="880" y="640" width="26" height="36"/>
+      <rect x="926" y="640" width="26" height="36"/>
+    </g>
+
+    <!-- wing windows -->
+    <g fill="#89a2cf" opacity="0.8">
+      <rect x="455" y="510" width="24" height="32"/>
+      <rect x="500" y="510" width="24" height="32"/>
+      <rect x="545" y="510" width="24" height="32"/>
+      <rect x="455" y="565" width="24" height="32"/>
+      <rect x="500" y="565" width="24" height="32"/>
+      <rect x="545" y="565" width="24" height="32"/>
+      <rect x="455" y="620" width="24" height="32"/>
+      <rect x="500" y="620" width="24" height="32"/>
+      <rect x="545" y="620" width="24" height="32"/>
+      <rect x="455" y="675" width="24" height="32"/>
+      <rect x="500" y="675" width="24" height="32"/>
+      <rect x="545" y="675" width="24" height="32"/>
+
+      <rect x="1005" y="510" width="24" height="32"/>
+      <rect x="1050" y="510" width="24" height="32"/>
+      <rect x="1095" y="510" width="24" height="32"/>
+      <rect x="1005" y="565" width="24" height="32"/>
+      <rect x="1050" y="565" width="24" height="32"/>
+      <rect x="1095" y="565" width="24" height="32"/>
+      <rect x="1005" y="620" width="24" height="32"/>
+      <rect x="1050" y="620" width="24" height="32"/>
+      <rect x="1095" y="620" width="24" height="32"/>
+      <rect x="1005" y="675" width="24" height="32"/>
+      <rect x="1050" y="675" width="24" height="32"/>
+      <rect x="1095" y="675" width="24" height="32"/>
+    </g>
+  </g>
+</svg>

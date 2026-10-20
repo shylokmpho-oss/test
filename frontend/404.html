@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hospital Booking System - Page Not Found</title>
+<!-- Served for any unknown URL, so asset paths are absolute -->
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<div class="auth-wrap">
+  <div class="auth-card">
+    <div class="auth-header">
+      <div class="brand">
+        <div class="badge">H</div>
+        <div class="name">Hospital Booking System</div>
+      </div>
+      <div class="sub">Page not found</div>
+    </div>
+    <div class="auth-body not-found">
+      <div class="code">404</div>
+      <p class="muted" style="margin:6px 0 20px;">The page you were looking for doesn't exist or has moved.</p>
+      <a href="/index.html" id="homeLink"><button type="button" class="btn btn-primary">Go to the Home Page</button></a>
+    </div>
+  </div>
+</div>
+
+<script src="/js/api.js"></script>
+<script>
+  // Logged-in users are offered their own dashboard instead.
+  if (Session.isLoggedIn()) {
+    const link = document.getElementById("homeLink");
+    link.href = "/" + Session.dashboard();
+    link.querySelector("button").textContent = "Go to My Dashboard";
+  }
+</script>
+<script src="/js/sos.js"></script>
+</body>
+</html>

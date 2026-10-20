@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hospital Booking System - Register</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="auth-wrap">
+  <div class="auth-card">
+    <div class="auth-header">
+      <a href="index.html" class="back-home">← Back to Home</a>
+      <div class="brand">
+        <div class="badge">H</div>
+        <div class="name">Hospital Booking System</div>
+      </div>
+      <div class="sub">Create your patient account</div>
+    </div>
+    <div class="auth-body">
+
+      <div id="banner" class="banner"></div>
+
+      <form id="registerForm" novalidate>
+        <p class="required-note">Required fields</p>
+        <div class="row-2">
+          <div class="field" id="f-first">
+            <label for="first_name">First Name</label>
+            <input type="text" id="first_name" required>
+            <div class="error">Required.</div>
+          </div>
+          <div class="field" id="f-last">
+            <label for="last_name">Last Name</label>
+            <input type="text" id="last_name" required>
+            <div class="error">Required.</div>
+          </div>
+        </div>
+
+        <div class="field" id="f-surname">
+          <label for="surname">Surname (as on ID)</label>
+          <input type="text" id="surname" required>
+          <div class="hint">Usually the same as your last name.</div>
+          <div class="error">Required.</div>
+        </div>
+
+        <div class="field" id="f-id">
+          <label for="id_number">ID Number</label>
+          <input type="text" id="id_number" inputmode="numeric" pattern="[0-9]*" maxlength="13" required>
+          <div class="hint">Exactly 13 digits, no letters (e.g. 9203125800083). This is what you'll log in with.</div>
+          <div class="error">ID number must be exactly 13 digits, numbers only.</div>
+        </div>
+
+        <div class="field" id="f-mobile">
+          <label for="mobile_number">Mobile Number</label>
+          <input type="text" id="mobile_number" placeholder="082 345 6789" required>
+          <div class="error">Please enter a valid mobile number.</div>
+        </div>
+
+        <div class="field" id="f-email">
+          <label for="email">Email Address</label>
+          <input type="email" id="email">
+          <div class="hint">Optional.</div>
+          <div class="error">Please enter a valid email address.</div>
+        </div>
+
+        <div class="field" id="f-channel">
+          <label for="preferred_channel">Send my booking confirmations and reset codes by</label>
+          <select id="preferred_channel" required>
+            <option value="SMS">SMS</option>
+            <option value="WHATSAPP">WhatsApp</option>
+          </select>
+          <div class="hint">Sent to the mobile number above.</div>
+        </div>
+
+        <div class="row-2">
+          <div class="field" id="f-password">
+            <label for="password">Password</label>
+            <input type="password" id="password" required>
+            <div class="error">At least 8 characters.</div>
+          </div>
+          <div class="field" id="f-confirm">
+            <label for="confirm_password">Confirm Password</label>
+            <input type="password" id="confirm_password" required>
+            <div class="error">Passwords do not match.</div>
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary" id="submitBtn">Create Account</button>
+      </form>
+
+      <div class="divider">Already registered?</div>
+      <a href="login.html"><button type="button" class="btn btn-secondary">Log In</button></a>
+    </div>
+  </div>
+</div>
+
+<script src="js/api.js"></script>
+<script src="js/register.js"></script>
+<script src="js/sos.js"></script>
+</body>
+</html>
